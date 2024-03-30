@@ -41,6 +41,7 @@ const Signup = () => {
     name: string;
   } | null>(null);
 
+  // fetch country list
   const [countryListData, countryListLoading] = useDocument(
     doc(getFirestore(firebaseApp), "countryList", "countryList"),
     {
@@ -65,6 +66,7 @@ const Signup = () => {
   };
 
   const onSelectCountry = (e: ChangeEvent<HTMLSelectElement>) => {
+    // remove "Choose a country option" after user selects a function
     e.target.remove(0);
 
     setUserDetails({
@@ -110,11 +112,14 @@ const Signup = () => {
   const signupHandler = async () => {
     try {
       setSignupButtonLoading(true);
+
+      // save userdetails to `userData` collection with phone number as document id
       await setDoc(
         doc(firebaseDB, "userData", userDetails?.phoneNumber),
         userDetails
       );
 
+      // navigate user to profile page once signup is complete
       navigate("/profile", {
         state: {
           userDetails,

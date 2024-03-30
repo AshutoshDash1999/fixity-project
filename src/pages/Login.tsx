@@ -13,9 +13,11 @@ const Login = () => {
     try {
       setLoginButtonLoading(true);
       if (userPhoneNumber) {
+        // search for document id with phone number from `userData` collection
         const docRef = doc(firebaseDB, "userData", userPhoneNumber);
         const docSnap = await getDoc(docRef);
-        console.log(docSnap.data());
+
+        // if document exists then redirect user to profile or else redirect to sign up page
         if (docSnap.exists()) {
           sessionStorage.setItem("userDetails", JSON.stringify(docSnap.data()));
           navigate("/profile", {
