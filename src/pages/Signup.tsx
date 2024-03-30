@@ -1,11 +1,5 @@
-import {
-  addDoc,
-  collection,
-  doc,
-  getFirestore,
-  setDoc,
-} from "firebase/firestore";
-import { ChangeEvent, useEffect, useState } from "react";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { ChangeEvent, useState } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useLocation } from "react-router-dom";
 import { firebaseApp, firebaseDB } from "../utils/firebaseConfig";
@@ -40,13 +34,13 @@ const Signup = () => {
   const [signupButtonLoading, setSignupButtonLoading] = useState(false);
 
   const [selectedCountry, setSelectedCountry] =
-    useState<CountryDataProps>(null);
+    useState<CountryDataProps | null>(null);
   const [selectedState, setSelectedState] = useState<{
     cities: string[];
     name: string;
-  }>(null);
+  } | null>(null);
 
-  const [countryListData, countryListLoading, countryListError] = useDocument(
+  const [countryListData, countryListLoading] = useDocument(
     doc(getFirestore(firebaseApp), "countryList", "countryList"),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
@@ -99,7 +93,7 @@ const Signup = () => {
     setSelectedState(
       selectedCountry?.states?.filter(
         (state) => state?.name === e.target.value
-      )[0]
+      )[0] ?? null
     );
   };
 
