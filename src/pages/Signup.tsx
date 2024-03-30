@@ -1,7 +1,7 @@
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { firebaseApp, firebaseDB } from "../utils/firebaseConfig";
 
 interface UserDetailsProp {
@@ -23,6 +23,7 @@ interface CountryDataProps {
 
 const Signup = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<UserDetailsProp>({
     name: "",
@@ -113,6 +114,12 @@ const Signup = () => {
         doc(firebaseDB, "userData", userDetails?.phoneNumber),
         userDetails
       );
+
+      navigate("/profile", {
+        state: {
+          userDetails,
+        },
+      });
     } catch (e) {
       console.error("Error adding document: ", e);
     } finally {
